@@ -1,0 +1,68 @@
+@model AttendeeHomeViewModel
+@{
+    ViewData["Title"] = "Attendee Home";
+}
+
+<div class="container mt-4">
+  <h2>Welcome, Attendee</h2>
+  <p class="text-muted">Browse events and manage your tickets.</p>
+
+  <h4 class="mt-4 mb-3">Upcoming Events</h4>
+  @if (Model.Events.Count == 0)
+  {
+    <p class="text-muted">No upcoming events yet.</p>
+  }
+  <div class="row g-4">
+    @foreach (var e in Model.Events)
+    {
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">@e.Title</h5>
+            <p class="mb-1">Date: @e.Date.ToString("dd MMM yyyy")</p>
+            <p class="mb-1">Venue: @e.Venue</p>
+            <p class="fw-bold">Rs. @e.Price.ToString("N0")</p>
+            <a asp-action="Book" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Book Seats</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <h4 class="mt-5 mb-3">My Tickets</h4>
+  @if (Model.Tickets.Count == 0)
+  {
+    <p class="text-muted">You have no tickets yet.</p>
+  }
+  else
+  {
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr><th>Ticket Code</th><th>Event</th><th>Date</th><th>Seat</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          @foreach (var t in Model.Tickets)
+          {
+            <tr>
+              <td class="fw-bold">@t.TicketCode</td>
+              <td>@t.Event?.Title</td>
+              <td>@t.Event?.Date.ToString("dd MMM yyyy")</td>
+              <td>@t.SeatNumber</td>
+              <td>
+                @if (t.IsUsed)
+                {
+                  <span class="badge bg-secondary">Used</span>
+                }
+                else
+                {
+                  <span class="badge bg-success">Valid</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

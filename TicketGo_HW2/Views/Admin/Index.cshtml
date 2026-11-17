@@ -1,0 +1,60 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Home";
+}
+
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+
+  <div class="row g-3 mt-2">
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Users</h6><h2>@Model.Users.Count</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Events</h6><h2>@Model.Events.Count</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Tickets Sold</h6><h2>@Model.TicketsSold</h2></div></div></div>
+  </div>
+
+  <h4 class="mt-5 mb-3">Users</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr><th>Email</th><th>Role</th></tr>
+      </thead>
+      <tbody>
+        @foreach (var u in Model.Users)
+        {
+          <tr><td>@u.Email</td><td>@u.Role</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="mt-5 mb-3">All Events</h4>
+  @if (Model.Events.Count == 0)
+  {
+    <p class="text-muted">No events yet.</p>
+  }
+  else
+  {
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr><th>Event</th><th>Date</th><th>Seats Booked</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          @foreach (var e in Model.Events)
+          {
+            <tr>
+              <td>@e.Title</td>
+              <td>@e.Date.ToString("dd MMM yyyy")</td>
+              <td>@e.Tickets.Count / @e.TotalSeats</td>
+              <td>
+                <form asp-action="DeleteEvent" asp-route-id="@e.Id" method="post" class="d-inline" onsubmit="return confirm('Remove this event?');">
+                  <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                </form>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

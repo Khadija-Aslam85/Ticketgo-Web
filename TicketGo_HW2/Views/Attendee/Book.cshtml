@@ -1,0 +1,29 @@
+@model BookViewModel
+@{
+    ViewData["Title"] = "Book Seats";
+}
+
+<div class="container mt-4">
+  <h2>@Model.Event.Title</h2>
+  <p class="text-muted">@Model.Event.Venue | @Model.Event.Date.ToString("dd MMM yyyy") | Rs. @Model.Event.Price.ToString("N0") per seat</p>
+
+  <form asp-action="Book" asp-route-id="@Model.Event.Id" method="post">
+    <h5 class="mt-4">Choose your seats</h5>
+    <p>
+      <span class="badge bg-success">Free</span>
+      <span class="badge bg-secondary">Taken</span>
+    </p>
+
+    <div class="seat-grid mb-4">
+      @for (var i = 1; i <= Model.Event.TotalSeats; i++)
+      {
+        var taken = Model.BookedSeats.Contains(i.ToString());
+        <input type="checkbox" class="btn-check" name="seats" id="seat@(i)" value="@i" disabled="@taken" />
+        <label class="btn @(taken ? "btn-secondary" : "btn-outline-success") seat" for="seat@(i)">@i</label>
+      }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+  </form>
+</div>

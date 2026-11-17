@@ -1,0 +1,46 @@
+@model List<Event>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<header class="hero text-white text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Book Event Tickets Online</h1>
+    <p class="lead">Pick your seats, get a ticket code, and walk in. No paper, no screenshots.</p>
+    <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg me-2">Get Started</a>
+    <a href="#events" class="btn btn-outline-light btn-lg">See Events</a>
+  </div>
+</header>
+
+<section class="container mt-5" id="events">
+  <h2 class="mb-4 text-center">Upcoming Events</h2>
+  @if (Model.Count == 0)
+  {
+    <p class="text-center text-muted">No upcoming events yet.</p>
+  }
+  <div class="row g-4">
+    @foreach (var e in Model)
+    {
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">@e.Title</h5>
+            <p class="mb-1">Date: @e.Date.ToString("dd MMM yyyy")</p>
+            <p class="mb-1">Venue: @e.Venue</p>
+            <p class="fw-bold">Rs. @e.Price.ToString("N0")</p>
+            <a asp-controller="Attendee" asp-action="Book" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Book Seats</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<section class="container mt-5">
+  <h2 class="mb-4 text-center">How It Works</h2>
+  <div class="row text-center g-4">
+    <div class="col-md-4"><h1>1</h1><h5>Choose an event</h5><p>Browse upcoming events and open the one you like.</p></div>
+    <div class="col-md-4"><h1>2</h1><h5>Pick your seats</h5><p>Select free seats from the seat map and confirm.</p></div>
+    <div class="col-md-4"><h1>3</h1><h5>Show your ticket</h5><p>Gate staff check your ticket code and you are in.</p></div>
+  </div>
+</section>

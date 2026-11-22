@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Gate Staff Home";
+}
+
+<div class="container mt-4">
+  <h2>Gate Staff - Ticket Check</h2>
+  <p class="text-muted">Type the ticket code to check entry. A valid ticket is marked as used.</p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5>Verify Ticket</h5>
+          <form id="verifyForm" asp-action="Verify" method="post">
+            <div class="mb-3">
+              <label for="ticketCode" class="form-label">Ticket code</label>
+              <input type="text" id="ticketCode" name="ticketCode" class="form-control" placeholder="e.g. 3F9A1C2B" autocomplete="off" />
+            </div>
+            <button type="submit" class="btn btn-primary">Verify</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Result</h5>
+      <div id="result"><p class="text-muted">Enter a ticket code to see the result.</p></div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/staff.js"></script>
+}

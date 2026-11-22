@@ -1,0 +1,83 @@
+@model AttendeeHomeViewModel
+@{
+    ViewData["Title"] = "Attendee Home";
+}
+
+<div class="container mt-4">
+  <h2>Welcome, @User.FindFirst("FullName")?.Value</h2>
+  <p class="text-muted">Browse events and manage your tickets.</p>
+
+  <h4 class="mt-4 mb-3">Upcoming Events</h4>
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" id="searchBox" class="form-control" placeholder="Search events by name or venue..."
+             data-url="@Url.Action("Search", "Home")" autocomplete="off" />
+    </div>
+  </div>
+  <div class="row g-4" id="eventList">
+    <partial name="_EventCards" model="Model.Events" />
+  </div>
+
+  <h4 class="mt-5 mb-3">My Tickets</h4>
+  @if (Model.Tickets.Count == 0)
+  {
+    <p class="text-muted">You have no tickets yet.</p>
+  }
+  else
+  {
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr><th>Ticket Code</th><th>Event</th><th>Date</th><th>Seat</th><th>Status</th><th>QR</th></tr>
+        </thead>
+        <tbody>
+          @foreach (var t in Model.Tickets)
+          {
+            <tr>
+              <td class="fw-bold">@t.TicketCode</td>
+              <td>@t.EventTitle</td>
+              <td>@t.EventDate.ToString("dd MMM yyyy")</td>
+              <td>@t.SeatNumber</td>
+              <td>
+                @if (t.IsUsed)
+                {
+                  <span class="badge bg-secondary">Used</span>
+                }
+                else
+                {
+                  <span class="badge bg-success">Valid</span>
+                }
+              </td>
+              <td>
+                <button type="button" class="btn btn-sm btn-outline-primary btn-qr"
+                        data-bs-toggle="modal" data-bs-target="#qrModal"
+                        data-code="@t.TicketCode"
+                        data-url="@Url.Action("Qr", "Attendee", new { code = t.TicketCode })">View QR</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<div class="modal fade" id="qrModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content text-center">
+      <div class="modal-header">
+        <h5 class="modal-title">Your QR Ticket</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <img id="qrImg" src="" alt="QR code" class="img-fluid" />
+        <p class="mt-2 mb-0 fw-bold" id="qrCodeText"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script src="~/js/search.js"></script>
+  <script src="~/js/attendee.js"></script>
+}

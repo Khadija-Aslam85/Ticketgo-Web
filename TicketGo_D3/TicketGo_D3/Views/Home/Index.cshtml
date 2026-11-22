@@ -1,0 +1,43 @@
+@model List<EventSummary>
+@{
+    ViewData["Title"] = "Home";
+}
+
+@section Hero {
+  <header class="hero text-white text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Book Event Tickets Online</h1>
+      <p class="lead">Pick your seats, get a QR ticket, and walk in. No paper, no screenshots.</p>
+      <a asp-controller="Account" asp-action="Register" class="btn btn-light btn-lg me-2">Get Started</a>
+      <a href="#events" class="btn btn-outline-light btn-lg">See Events</a>
+    </div>
+  </header>
+}
+
+<section class="container mt-5" id="events">
+  <h2 class="mb-3 text-center">Upcoming Events</h2>
+
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-6">
+      <input type="text" id="searchBox" class="form-control" placeholder="Search events by name or venue..."
+             data-url="@Url.Action("Search", "Home")" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="row g-4" id="eventList">
+    <partial name="_EventCards" model="Model" />
+  </div>
+</section>
+
+<section class="container mt-5">
+  <h2 class="mb-4 text-center">How It Works</h2>
+  <div class="row text-center g-4">
+    <div class="col-md-4"><h1>1</h1><h5>Choose an event</h5><p>Browse upcoming events and open the one you like.</p></div>
+    <div class="col-md-4"><h1>2</h1><h5>Pick your seats</h5><p>Select free seats from the seat map and confirm.</p></div>
+    <div class="col-md-4"><h1>3</h1><h5>Show your QR ticket</h5><p>Gate staff check your ticket code and you are in.</p></div>
+  </div>
+</section>
+
+@section Scripts {
+  <script src="~/js/search.js"></script>
+}

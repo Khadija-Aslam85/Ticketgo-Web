@@ -1,0 +1,76 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Home";
+}
+
+<div class="container mt-4">
+  <h2>Admin Dashboard</h2>
+  @Html.AntiForgeryToken()
+
+  <div class="row g-3 mt-2">
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Users</h6><h2>@Model.Stats.Users</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Events</h6><h2>@Model.Stats.Events</h2></div></div></div>
+    <div class="col-md-4"><div class="card text-center"><div class="card-body"><h6>Tickets Sold</h6><h2>@Model.Stats.TicketsSold</h2></div></div></div>
+  </div>
+
+  <h4 class="mt-5 mb-3">Users</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        @foreach (var u in Model.Users)
+        {
+          <tr>
+            <td>@u.FullName</td>
+            <td>@u.Email</td>
+            <td>@u.Role</td>
+            <td><span class="badge js-status @(u.IsBlocked ? "bg-danger" : "bg-success")">@(u.IsBlocked ? "Blocked" : "Active")</span></td>
+            <td>
+              @if (u.Role == "Admin")
+              {
+                <span class="text-muted">-</span>
+              }
+              else
+              {
+                <button type="button" class="btn btn-sm @(u.IsBlocked ? "btn-success" : "btn-danger") js-toggle-block"
+                        data-url="@Url.Action("ToggleBlock", "Admin", new { id = u.Id })">@(u.IsBlocked ? "Unblock" : "Block")</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h4 class="mt-5 mb-3">All Events</h4>
+  @if (Model.Events.Count == 0)
+  {
+    <p class="text-muted">No events yet.</p>
+  }
+  else
+  {
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr><th>Event</th><th>Date</th><th>Seats Booked</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          @foreach (var e in Model.Events)
+          {
+            <tr>
+              <td>@e.Title</td>
+              <td>@e.Date.ToString("dd MMM yyyy")</td>
+              <td>@e.SeatsBooked / @e.TotalSeats</td>
+              <td>
+                <button type="button" class="btn btn-sm btn-danger js-delete"
+                        data-url="@Url.Action("DeleteEvent", "Admin", new { id = e.Id })">Remove</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,0 +1,22 @@
+@model IEnumerable<EventSummary>
+
+@if (!Model.Any())
+{
+  <div class="col-12"><p class="text-center text-muted">No events found.</p></div>
+}
+
+@foreach (var e in Model)
+{
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">@e.Title</h5>
+        <p class="mb-1">Date: @e.Date.ToString("dd MMM yyyy")</p>
+        <p class="mb-1">Venue: @e.Venue</p>
+        <p class="mb-1">Seats left: @(e.TotalSeats - e.SeatsBooked)</p>
+        <p class="fw-bold">Rs. @e.Price.ToString("N0")</p>
+        <a asp-controller="Attendee" asp-action="Book" asp-route-id="@e.Id" class="btn btn-primary btn-sm">Book Seats</a>
+      </div>
+    </div>
+  </div>
+}

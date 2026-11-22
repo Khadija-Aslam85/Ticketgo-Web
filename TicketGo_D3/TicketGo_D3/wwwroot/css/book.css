@@ -1,0 +1,10 @@
+.seat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 560px;
+}
+
+.seat {
+  width: 48px;
+}
